@@ -8,15 +8,15 @@ kubectl config use-context AKSCluster1
 
 
 #Let's create a deployment
-kubectl create deployment hello-world-loadbalancer \
-    --image=gcr.io/google-samples/hello-app:1.0 \
+kubectl create deployment hello-world-loadbalancer `
+    --image=gcr.io/google-samples/hello-app:1.0 `
     --replicas=3
 
 
 #When creating a service, you can define a type, if you don't define a type, the default is ClusterIP
-kubectl expose deployment hello-world-loadbalancer \
-    --port=80 \
-    --target-port=8080 \
+kubectl expose deployment hello-world-loadbalancer `
+    --port=80 `
+    --target-port=8080 `
     --type LoadBalancer
 
 
@@ -26,7 +26,7 @@ kubectl get service
 
 
 #Let's test access to our application via the load balancer over the internet on the public IP address.
-LOADBALANCERIP=$(kubectl get service hello-world-loadbalancer -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
+$LOADBALANCERIP=$(kubectl get service hello-world-loadbalancer -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
 curl http://$LOADBALANCERIP
 
 
@@ -50,21 +50,21 @@ kubectl delete service hello-world-loadbalancer
 
 
 ###More example with other service types...ClusterIP and NodePort
-kubectl create deployment hello-world-clusterip \
-    --image=gcr.io/google-samples/hello-app:1.0 \
+kubectl create deployment hello-world-clusterip `
+    --image=gcr.io/google-samples/hello-app:1.0 `
     --replicas=3
 
 
 #Expose the service
-kubectl expose deployment hello-world-clusterip \
-    --port=80 \
-    --target-port=8080 \
+kubectl expose deployment hello-world-clusterip `
+    --port=80 `
+    --target-port=8080 `
     --type ClusterIP
 
 
 #Since ClusterIP is only available inside the cluster...let's get a terminal on a node in our cluster 
 #and then access the ClusterIP Service from that node
-NODE=$(kubectl get nodes -o jsonpath='{ .items[0].metadata.name }')
+$NODE=$(kubectl get nodes -o jsonpath='{ .items[0].metadata.name }')
 kubectl debug node/$NODE -it --image=ubuntu
 apt-get update && apt-get install curl -y
 
@@ -86,15 +86,15 @@ kubectl delete service hello-world-clusterip
 
 
 #Let's do a nodeport example
-kubectl create deployment hello-world-nodeport \
-    --image=gcr.io/google-samples/hello-app:1.0 \
+kubectl create deployment hello-world-nodeport `
+    --image=gcr.io/google-samples/hello-app:1.0 `
     --replicas=3
 
 
 #Expose the service
-kubectl expose deployment hello-world-nodeport \
-    --port=80 \
-    --target-port=8080 \
+kubectl expose deployment hello-world-nodeport `
+    --port=80 `
+    --target-port=8080 `
     --type NodePort
 
 
@@ -108,7 +108,7 @@ kubectl get service
 
 #NodePort is available external to the cluster but we don't have direct remote access onto our Azure Virtual Network that our nodes are on
 #So we can open a shell to one of the nodes and access the NodePort service from there. 
-NODE=$(kubectl get nodes -o jsonpath='{ .items[0].metadata.name }')
+$NODE=$(kubectl get nodes -o jsonpath='{ .items[0].metadata.name }')
 kubectl debug node/$NODE -it --image=ubuntu
 apt-get update && apt-get install curl -y
 
@@ -121,7 +121,7 @@ curl http://PASTE_ANY_NODENAME_HERE:NODEPORTPORT
 
 
 #This an example URL string to access the nodeport service
-#curl http://aks-nodepool1-36349573-vmss000000:32331
+#curl http://aks-nodepool1-23745120-vmss000003:32687
 
 
 #exit from the node

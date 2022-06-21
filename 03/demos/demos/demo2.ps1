@@ -3,14 +3,14 @@ az group create --name AKS-AppGW --location centralus
 
 
 ##Create a cluster with the AppGW Ingress addon
-az aks create \
-    --resource-group AKS-AppGW  \
-    --name AKSClusterAppGW \
-    --network-plugin azure \
-    --enable-managed-identity \
-    --enable-addon ingress-appgw \
-    --appgw-name aks-appgw \
-    --appgw-subnet-cidr "10.225.0.0/16" \
+az aks create `
+    --resource-group AKS-AppGW  `
+    --name AKSClusterAppGW `
+    --network-plugin azure `
+    --enable-managed-identity `
+    --enable-addon ingress-appgw `
+    --appgw-name aks-appgw `
+    --appgw-subnet-cidr "10.225.0.0/16" `
     --generate-ssh-keys
 
 
@@ -31,7 +31,7 @@ kubectl get ingress --watch
 
 
 #Access the application via the exposed ingress on the public IP
-INGRESSIP=$(kubectl get ingress -o jsonpath='{ .items[].status.loadBalancer.ingress[].ip }')
+$INGRESSIP=$(kubectl get ingress -o jsonpath='{ .items[].status.loadBalancer.ingress[].ip }')
 echo $INGRESSIP
 
 
