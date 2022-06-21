@@ -1,6 +1,6 @@
 #Deploying a cluster to a new virtual network (kubenet)
 az login
-az account set --subscription "Demonstration Account"
+az account set --subscription "AzIntConsumption"
 
 
 #Create a resource group for the serivces we're going to create
@@ -9,9 +9,9 @@ az group create --name "AKS-Cloud" --location centralus
 
 #Let's create our AKS cluster with default settings
 #this will create our virtual network and subnet and will use kubenet.
-az aks create \
-    --resource-group "AKS-Cloud" \
-    --generate-ssh-keys \
+az aks create `
+    --resource-group "AKS-Cloud" `
+    --generate-ssh-keys `
     --name AKSCluster1
 
 
@@ -36,8 +36,8 @@ kubectl describe nodes | more
 
 
 #Create a workload
-kubectl create deployment hello-world \
-    --image=gcr.io/google-samples/hello-app:1.0 \
+kubectl create deployment hello-world `
+    --image=gcr.io/google-samples/hello-app:1.0 `
     --replicas=3
 
 
