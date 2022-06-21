@@ -77,8 +77,8 @@ az network vnet create `
 
 
 az ad sp create-for-rbac
-VNET_ID=$(az network vnet show --resource-group "AKS-Cloud-ExistingNetwork" --name network-existing --query id -o tsv)
-SUBNET_ID=$(az network vnet subnet show --resource-group "AKS-Cloud-ExistingNetwork" --vnet-name network-existing --name subnet-existing --query id -o tsv)
+$VNET_ID=$(az network vnet show --resource-group "AKS-Cloud-ExistingNetwork" --name network-existing --query id -o tsv)
+$SUBNET_ID=$(az network vnet subnet show --resource-group "AKS-Cloud-ExistingNetwork" --vnet-name network-existing --name subnet-existing --query id -o tsv)
 
 echo $VNET_ID
 echo $SUBNET_ID
