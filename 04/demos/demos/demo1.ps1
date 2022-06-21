@@ -4,11 +4,11 @@ az group create --name aks-az --location centralus
 
 
 #1 - Create an AZ Aware AKS Cluster with a node in each zone.
-az aks create \
-    --resource-group aks-az \
-    --name aks-az \
-    --generate-ssh-keys \
-    --node-count 3 \
+az aks create `
+    --resource-group aks-az `
+    --name aks-az `
+    --generate-ssh-keys `
+    --node-count 3 `
     --zones 1 2 3
 
 
@@ -21,8 +21,8 @@ kubectl get nodes -L topology.kubernetes.io/region,topology.kubernetes.io/zone
 
 
 #Create a workload
-kubectl create deployment hello-world \
-    --image=gcr.io/google-samples/hello-app:1.0 \
+kubectl create deployment hello-world `
+    --image=gcr.io/google-samples/hello-app:1.0 `
     --replicas=3
 
 
@@ -31,9 +31,9 @@ kubectl get pods -o wide
 
 
 #If we scale the cluster it will keep the node count as even as possible accross the AZs.
-az aks scale \
-    --resource-group aks-az  \
-    --name aks-az  \
+az aks scale `
+    --resource-group aks-az  `
+    --name aks-az  `
     --node-count 6
 
 
@@ -48,11 +48,11 @@ az group create --name aks-az2 --location eastus2
 
 
 #Create an AZ aware cluster
-az aks create \
-    --resource-group aks-az2 \
-    --name aks-az2 \
-    --generate-ssh-keys \
-    --node-count 3 \
+az aks create `
+    --resource-group aks-az2 `
+    --name aks-az2 `
+    --generate-ssh-keys `
+    --node-count 3 `
     --zones 1 2 3
 
 
@@ -61,12 +61,12 @@ az aks get-credentials --resource-group aks-az2 --name aks-az2
 
 
 #Start a workload in eastus2
-kubectl create deployment hello-world-loadbalancer-eastus2 \
+kubectl create deployment hello-world-loadbalancer-eastus2 `
     --image=gcr.io/google-samples/hello-app:1.0 --replicas=3
 
 
 #Expose it using a LoadBalancer
-kubectl expose deployment hello-world-loadbalancer-eastus2 \
+kubectl expose deployment hello-world-loadbalancer-eastus2 `
     --port=80 --target-port=8080 --type LoadBalancer
 
 
@@ -84,12 +84,12 @@ kubectl config use-context aks-az
 
 
 #Create a workload in centralus
-kubectl create deployment hello-world-loadbalancer-centralus \
+kubectl create deployment hello-world-loadbalancer-centralus `
     --image=gcr.io/google-samples/hello-app:1.0 --replicas=3
 
 
 #Expose it using a LoadBalancer
-kubectl expose deployment hello-world-loadbalancer-centralus \
+kubectl expose deployment hello-world-loadbalancer-centralus `
     --port=80 --target-port=8080 --type LoadBalancer
 
 
@@ -98,7 +98,7 @@ kubectl get service --watch
 
 
 #Get the load balancer's IP address
-LOADBALANCERIP1=$(kubectl get service hello-world-loadbalancer-centralus -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
+$LOADBALANCERIP1=$(kubectl get service hello-world-loadbalancer-centralus -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
 
 
 #Make sure we have both populated
@@ -113,30 +113,30 @@ curl http://$LOADBALANCERIP2
 
 #Create a Traffic Manager profile, this DNSNAME will become part of the URL we'll point to
 DNSNAME="psdemo$RANDOM"
-az network traffic-manager profile create \
-  --name aks-atm \
-  --resource-group aks-az2 \
-  --routing-method Priority \
+az network traffic-manager profile create `
+  --name aks-atm `
+  --resource-group aks-az2 `
+  --routing-method Priority `
   --unique-dns-name $DNSNAME
 
 
 #Create an endpoint pointing to the public IP of load balancer in centralus. This can also be an AppGW too. 
-az network traffic-manager endpoint create \
-  --resource-group aks-az2  \
-  --profile-name aks-atm \
-  --name centralus \
-  --type externalEndpoints \
-  --priority 1 \
+az network traffic-manager endpoint create `
+  --resource-group aks-az2  `
+  --profile-name aks-atm `
+  --name centralus `
+  --type externalEndpoints `
+  --priority 1 `
   --target $LOADBALANCERIP1
 
 
 #Create an endpoint pointing to the public IP of load balancer in eastus2. This can also be an AppGW too. 
-az network traffic-manager endpoint create \
-  --resource-group aks-az2  \
-  --profile-name aks-atm \
-  --name eastus2 \
-  --type externalEndpoints \
-  --priority 2 \
+az network traffic-manager endpoint create `
+  --resource-group aks-az2  `
+  --profile-name aks-atm `
+  --name eastus2 `
+  --type externalEndpoints `
+  --priority 2 `
   --target $LOADBALANCERIP2
 
 
