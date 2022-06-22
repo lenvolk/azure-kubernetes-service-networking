@@ -33,7 +33,7 @@ kubectl logs --namespace kube-system --selector 'k8s-app=kube-dns' --follow
 
 
 #Run some DNS queries against the kube-dns service cluster ip to ensure everything works...
-SERVICEIP=$(kubectl get service --namespace kube-system kube-dns -o jsonpath='{ .spec.clusterIP }')
+$SERVICEIP=$(kubectl get service --namespace kube-system kube-dns -o jsonpath='{ .spec.clusterIP }')
 nslookup www.pluralsight.com $SERVICEIP
 nslookup www.centinosystems.com $SERVICEIP
 
@@ -49,7 +49,7 @@ kubectl apply -f DeploymentCustomDns.yaml
 
 #Let's check the DNS configuration of a Pod created with that configuration
 #This line will grab the first pod matching the defined selector
-PODNAME=$(kubectl get pods --selector=app=hello-world-customdns -o jsonpath='{ .items[0].metadata.name }')
+$PODNAME=$(kubectl get pods --selector=app=hello-world-customdns -o jsonpath='{ .items[0].metadata.name }')
 echo $PODNAME
 kubectl exec -it $PODNAME -- cat /etc/resolv.conf
 
@@ -69,7 +69,7 @@ kubectl get pods -o wide
 
 
 #Get the address of our DNS Service again...just in case
-SERVICEIP=$(kubectl get service --namespace kube-system kube-dns -o jsonpath='{ .spec.clusterIP }')
+$SERVICEIP=$(kubectl get service --namespace kube-system kube-dns -o jsonpath='{ .spec.clusterIP }')
 
 
 #For one of the pods replace the dots in the IP address with dashes for example 192.168.206.68 becomes 192-168-206-68
@@ -94,7 +94,7 @@ kubectl delete -f Deployment.yaml
 
 
 #Find the name of a Node running one of the DNS Pods running...so we're going to observe DNS queries there.
-DNSPODNODENAME=$(kubectl get pods --namespace kube-system --selector=k8s-app=kube-dns -o jsonpath='{ .items[0].spec.nodeName }')
+$DNSPODNODENAME=$(kubectl get pods --namespace kube-system --selector=k8s-app=kube-dns -o jsonpath='{ .items[0].spec.nodeName }')
 echo $DNSPODNODENAME
 
 

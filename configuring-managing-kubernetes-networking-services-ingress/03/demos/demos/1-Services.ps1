@@ -5,12 +5,12 @@ cd ~/content/course/03/demos/
 #ClusterIP
 
 #Imperative, create a deployment with one replica
-kubectl create deployment hello-world-clusterip \
+kubectl create deployment hello-world-clusterip `
     --image=gcr.io/google-samples/hello-app:1.0
 
 
 #When creating a service, you can define a type, if you don't define a type, the default is ClusterIP
-kubectl expose deployment hello-world-clusterip \
+kubectl expose deployment hello-world-clusterip `
     --port=80 --target-port=8080 --type ClusterIP
 
 
@@ -63,12 +63,12 @@ kubectl delete service hello-world-clusterip
 
 #2 - Creating a NodePort Service
 #Imperative, create a deployment with one replica
-kubectl create deployment hello-world-nodeport \
+kubectl create deployment hello-world-nodeport `
     --image=gcr.io/google-samples/hello-app:1.0
 
 
 #When creating a service, you can define a type, if you don't define a type, the default is ClusterIP
-kubectl expose deployment hello-world-nodeport \
+kubectl expose deployment hello-world-nodeport `
     --port=80 --target-port=8080 --type NodePort
 
 
@@ -115,12 +115,12 @@ kubectl config use-context 'CSCluster'
 
 
 #Let's create a deployment
-kubectl create deployment hello-world-loadbalancer \
+kubectl create deployment hello-world-loadbalancer `
     --image=gcr.io/google-samples/hello-app:1.0
 
 
 #When creating a service, you can define a type, if you don't define a type, the default is ClusterIP
-kubectl expose deployment hello-world-loadbalancer \
+kubectl expose deployment hello-world-loadbalancer `
     --port=80 --target-port=8080 --type LoadBalancer
 
 

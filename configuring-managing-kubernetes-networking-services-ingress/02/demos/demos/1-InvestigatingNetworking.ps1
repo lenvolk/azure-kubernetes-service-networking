@@ -1,6 +1,6 @@
 #1 - Investigating Kubernetes Networking
 #Log into our local cluster
-ssh aen@c1-cp1
+ssh aen@aks-nodepool1-36542757-vmss000000
 cd ~/content/course/02/demos
 
 
@@ -21,14 +21,14 @@ kubectl get pods -o wide
 
 #Let's hop inside a pod and check out it's networking, a single interface an IP on the Pod Network
 #The line below will get a list of pods from the label query and return the name of the first pod in the list
-PODNAME=$(kubectl get pods --selector=app=hello-world -o jsonpath='{ .items[0].metadata.name }')
+$PODNAME=$(kubectl get pods --selector=app=hello-world -o jsonpath='{ .items[0].metadata.name }')
 echo $PODNAME
 kubectl exec -it $PODNAME -- /bin/sh
 ip addr
 exit
 
 
-#For the Pod on c1-node1, let's find out how traffic gets from c1-cp1 to c1-node1 to get to that Pod.
+#For the Pod on c1-node1, let's find out how traffic gets from aks-nodepool1-36542757-vmss000000 to c1-node1 to get to that Pod.
 
 #Look at the annotations, specifically the annotation projectcalico.org/IPv4IPIPTunnelAddr: 192.168.19.64...your IP may vary
 #Check out the Addresses: InternalIP, that's the real IP of the Node.
@@ -36,10 +36,11 @@ exit
 # Calico is using a tunnel interfaces to implement the Pod Network model. 
 # Traffic going to other Pods will be sent into the tunnel interface and directly to the Node running the Pod.
 # For more info on Calico's operations https://docs.projectcalico.org/reference/cni-plugin/configuration
-kubectl describe node c1-cp1 | more
+kubectl get nodes -o wide
+kubectl describe node aks-nodepool1-36542757-vmss000000 | more
 
 
-#Let's see how the traffic gets to c1-node1 from c1-cp1
+#Let's see how the traffic gets to c1-node1 from aks-nodepool1-36542757-vmss000000
 #Via routes on the node, to get to c1-node1 traffic goes into tunl0/192.168.19.64...your IP may vary
 #Calico handles the tunneling and sends the packet to the correct node to be send on into the Pod running on that Node based on the defined routes
 #Follow each route, showing how to get to the Pod IP, it will need to go to the tun0 interface.
@@ -48,7 +49,7 @@ kubectl get pods -o wide
 route
 
 
-#The local tunl0 is 192.168.19.64, packets destined for Pods running on c1-cp1 will be routed to this interface and get encapsulated
+#The local tunl0 is 192.168.19.64, packets destined for Pods running on aks-nodepool1-36542757-vmss000000 will be routed to this interface and get encapsulated
 #Then send to the destination node for de-encapsulation.
 ip addr
 
@@ -57,7 +58,7 @@ ip addr
 ssh aen@c1-node1
 
 
-#This tunl0 is the destination interface, on this Node its 192.168.222.192, which we saw on the route listing on c1-cp1
+#This tunl0 is the destination interface, on this Node its 192.168.222.192, which we saw on the route listing on aks-nodepool1-36542757-vmss000000
 ip addr
 
 
@@ -65,7 +66,7 @@ ip addr
 route
 
 
-#Exit back to c1-cp1
+#Exit back to aks-nodepool1-36542757-vmss000000
 exit
 
 
@@ -76,7 +77,7 @@ exit
 
 #Azure Kubernetes Service - kubenet
 #Get all Nodes and their IP information, INTERNAL-IP is the real IP of the Node
-kubectl config use-context 'CSCluster'
+kubectl config use-context 'ExistingNetwork'
 
 
 #Let's deploy a basic workload, hello-world with 3 replicas.
@@ -97,7 +98,7 @@ kubectl get pods -o wide
 
 #Access an AKS Node via SSH so we can examine it's network config which uses kubenet
 #https://docs.microsoft.com/en-us/azure/aks/ssh#configure-virtual-machine-scale-set-based-aks-clusters-for-ssh-access
-NODENAME=$(kubectl get nodes -o jsonpath='{.items[0].metadata.name}')
+$NODENAME=$(kubectl get nodes -o jsonpath='{.items[0].metadata.name}')
 kubectl debug node/$NODENAME -it --image=mcr.microsoft.com/aks/fundamental/base-ubuntu:v0.0.11
 
 
@@ -128,7 +129,7 @@ exit
 
 #Here is the Pod's interface and it's IP. 
 #This interface is attached to the cbr0 bridge on the Node to get access to the Pod network. 
-PODNAME=$(kubectl get pods -o jsonpath='{ .items[0].metadata.name }')
+$PODNAME=$(kubectl get pods -o jsonpath='{ .items[0].metadata.name }')
 kubectl exec -it $PODNAME -- ip addr
 
 
