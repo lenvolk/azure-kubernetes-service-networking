@@ -19,7 +19,7 @@ kubectl get service
 
 
 #Get the Service's ClusterIP and store that for reuse.
-SERVICEIP=$(kubectl get service hello-world-clusterip -o jsonpath='{ .spec.clusterIP }')
+$SERVICEIP=$(kubectl get service hello-world-clusterip -o jsonpath='{ .spec.clusterIP }')
 echo $SERVICEIP
 
 
@@ -35,7 +35,7 @@ kubectl get pods -o wide
 #Access the pod's application directly on the Target Port on the Pod, not the service's Port, useful for troubleshooting.
 #Right now there's only one Pod and its one Endpoint
 kubectl get endpoints hello-world-clusterip
-PODIP=$(kubectl get endpoints hello-world-clusterip -o jsonpath='{ .subsets[].addresses[].ip }')
+$PODIP=$(kubectl get endpoints hello-world-clusterip -o jsonpath='{ .subsets[].addresses[].ip }')
 echo $PODIP
 curl http://$PODIP:8080
 
@@ -77,9 +77,9 @@ kubectl expose deployment hello-world-nodeport `
 kubectl get service
 
 
-CLUSTERIP=$(kubectl get service hello-world-nodeport -o jsonpath='{ .spec.clusterIP }')
-PORT=$(kubectl get service hello-world-nodeport -o jsonpath='{ .spec.ports[].port }')
-NODEPORT=$(kubectl get service hello-world-nodeport -o jsonpath='{ .spec.ports[].nodePort }')
+$CLUSTERIP=$(kubectl get service hello-world-nodeport -o jsonpath='{ .spec.clusterIP }')
+$PORT=$(kubectl get service hello-world-nodeport -o jsonpath='{ .spec.ports[].port }')
+$NODEPORT=$(kubectl get service hello-world-nodeport -o jsonpath='{ .spec.ports[].nodePort }')
 
 #Let's access the services on the Node Port...we can do that on each node in the cluster and 
 #from outside the cluster...regardless of where the pod actually is
@@ -128,8 +128,8 @@ kubectl expose deployment hello-world-loadbalancer `
 kubectl get service
 
 
-LOADBALANCERIP=$(kubectl get service hello-world-loadbalancer -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
-curl http://$LOADBALANCERIP:$PORT
+$LOADBALANCERIP=$(kubectl get service hello-world-loadbalancer -o jsonpath='{ .status.loadBalancer.ingress[].ip }')
+curl http://"$LOADBALANCERIP":"$PORT"
 
 
 #The loadbalancer, which is 'outside' your cluster, sends traffic to the NodePort Service which sends it to the ClusterIP to get to your pods!
