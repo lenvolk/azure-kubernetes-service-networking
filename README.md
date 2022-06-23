@@ -24,3 +24,7 @@ kubectl describe service hello-world-clusterip
 kubectl delete deployments hello-world-clusterip
 kubectl delete service hello-world-clusterip
 
+openssl req -x509 -nodes -days 365 -newkey rsa:2048 `
+    -keyout tls.key -out tls.crt -subj "/C=US/ST=ILLINOIS/L=CHICAGO/O=IT/OU=IT/CN=tls.example.com"
+kubectl create secret tls tls-secret --key tls.key --cert tls.crt
+kubectl delete secret tls-secret
