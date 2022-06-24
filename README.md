@@ -28,3 +28,8 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 `
     -keyout tls.key -out tls.crt -subj "/C=US/ST=ILLINOIS/L=CHICAGO/O=IT/OU=IT/CN=tls.example.com"
 kubectl create secret tls tls-secret --key tls.key --cert tls.crt
 kubectl delete secret tls-secret
+
+
+
+az vm update --resource-group fileservers --name FileSrvE2 --set osProfile.windowsConfiguration.enableAutomaticUpdates=true osProfile.windowsConfiguration.patchSettings.patchMode=AutomaticByPlatform
+az vm update --resource-group fileservers --name FileSrv2E2 --set osProfile.windowsConfiguration.enableAutomaticUpdates=true osProfile.windowsConfiguration.patchSettings.patchMode=AutomaticByPlatform
