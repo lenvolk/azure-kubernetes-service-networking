@@ -36,7 +36,9 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 `
 kubectl create secret tls tls-secret --key tls.key --cert tls.crt
 kubectl delete secret tls-secret
 
+#########################
 
+code --list-extensions | % { "code --install-extension $_" }
 
 az vm update --resource-group fileservers --name FileSrvE2 --set osProfile.windowsConfiguration.enableAutomaticUpdates=true osProfile.windowsConfiguration.patchSettings.patchMode=AutomaticByPlatform
 az vm update --resource-group fileservers --name FileSrv2E2 --set osProfile.windowsConfiguration.enableAutomaticUpdates=true osProfile.windowsConfiguration.patchSettings.patchMode=AutomaticByPlatform
