@@ -1,3 +1,10 @@
+# Login to Azure / set subscription
+$Subscription = "AzIntConsumption"
+Connect-AzAccount -Subscription $subscription
+
+# Disconnect-AzAccount
+
+
 # azure-kubernetes-service-networking
 
 az aks get-credentials --resource-group "AKS-Cloud" --name ExistingNetwork
