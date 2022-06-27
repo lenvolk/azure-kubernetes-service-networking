@@ -1,7 +1,8 @@
 # Login to Azure / set subscription
 $Subscription = "AzIntConsumption"
 Connect-AzAccount -Subscription $subscription
-
+# for Gov Sub only
+Connect-AzAccount -EnvironmentName AzureUSGovernment
 # Disconnect-AzAccount
 
 
