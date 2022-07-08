@@ -8,16 +8,11 @@
         "permissions": [
             {
                 "actions": [
-                    "Microsoft.Network/virtualNetworks/read"
+                    "*/read"
                 ],
                 "notActions": [
-                    "Microsoft.Network/virtualNetworks/Delete",
-                    "Microsoft.Network/virtualNetworks/Write",
-                    "Microsoft.Authorization/*/Delete",
-                    "Microsoft.Authorization/*/Write",
-                    "Microsoft.Authorization/elevateAccess/Action",
-                    "Microsoft.Blueprint/blueprintAssignments/write",
-                    "Microsoft.Blueprint/blueprintAssignments/delete"
+                    "*/Delete",
+                    "*/Write"
                 ],
                 "dataActions": [],
                 "notDataActions": []
