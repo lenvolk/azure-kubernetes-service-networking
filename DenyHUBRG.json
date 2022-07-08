@@ -8,24 +8,16 @@
         "permissions": [
             {
                 "actions": [
-                    "Microsoft.Authorization/*/read",
-                    "Microsoft.Insights/alertRules/*",
-                    "Microsoft.ResourceHealth/availabilityStatuses/read",
-                    "Microsoft.Resources/subscriptions/resourceGroups/read",
-                    "Microsoft.Network/loadBalancers/read",
-                    "Microsoft.Network/networkSecurityGroups/read",
-                    "Microsoft.Network/publicIPAddresses/read",
                     "Microsoft.Network/virtualNetworks/read"
                 ],
                 "notActions": [
-                    "Microsoft.Network/*/Delete",
-                    "Microsoft.Network/*/Write",
+                    "Microsoft.Network/virtualNetworks/Delete",
+                    "Microsoft.Network/virtualNetworks/Write",
                     "Microsoft.Authorization/*/Delete",
                     "Microsoft.Authorization/*/Write",
                     "Microsoft.Authorization/elevateAccess/Action",
                     "Microsoft.Blueprint/blueprintAssignments/write",
-                    "Microsoft.Blueprint/blueprintAssignments/delete",
-                    "Microsoft.Compute/galleries/share/action"
+                    "Microsoft.Blueprint/blueprintAssignments/delete"
                 ],
                 "dataActions": [],
                 "notDataActions": []
